@@ -1,7 +1,8 @@
 // -----------------------------
 // Viewport Scaling & Calibration Logic
 // -----------------------------
-let userScale = parseFloat(localStorage.getItem('calScale')) || 1.0;
+let userScaleX = parseFloat(localStorage.getItem('calScaleX')) || 1.0;
+let userScaleY = parseFloat(localStorage.getItem('calScaleY')) || 1.0;
 let userTransX = parseFloat(localStorage.getItem('calTransX')) || 0;
 let userTransY = parseFloat(localStorage.getItem('calTransY')) || 0;
 
@@ -9,8 +10,9 @@ function resizeTFT() {
     const screen = document.querySelector('.tft-screen');
     // Default base scale set to 1.0 to make it physically small (approx 2.8 inches)
     const baseScale = 1.0;
-    const finalScale = baseScale * userScale;
-    screen.style.transform = `scale(${finalScale}) translate(${userTransX}px, ${userTransY}px)`;
+    const finalScaleX = baseScale * userScaleX;
+    const finalScaleY = baseScale * userScaleY;
+    screen.style.transform = `translate(${userTransX}px, ${userTransY}px) scale(${finalScaleX}, ${finalScaleY})`;
 }
 
 function calShift(x, y) {
@@ -21,17 +23,21 @@ function calShift(x, y) {
     resizeTFT();
 }
 
-function calScale(ds) {
-    userScale += ds;
-    localStorage.setItem('calScale', userScale);
+function calScale(dx, dy) {
+    userScaleX += dx;
+    userScaleY += dy;
+    localStorage.setItem('calScaleX', userScaleX);
+    localStorage.setItem('calScaleY', userScaleY);
     resizeTFT();
 }
 
 function calReset() {
-    userScale = 1.0;
+    userScaleX = 1.0;
+    userScaleY = 1.0;
     userTransX = 0;
     userTransY = 0;
-    localStorage.removeItem('calScale');
+    localStorage.removeItem('calScaleX');
+    localStorage.removeItem('calScaleY');
     localStorage.removeItem('calTransX');
     localStorage.removeItem('calTransY');
     resizeTFT();
