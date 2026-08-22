@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Healthcare AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tft-wrapper">
+        <div class="tft-screen">
+            
+            <!-- 1. MAIN SCREEN -->
+            <div id="screen-main" class="screen active">
+                <div class="tk-header">
+                    <h2>HEALTHCARE AI ASSISTANT</h2>
+                </div>
+                
+                <div class="tk-card">
+                    <p class="tk-welcome-text">Welcome! Please configure and start your assessment below.</p>
+                    
+                    <p class="tk-label">Select Language:</p>
+                    <select id="lang-selector" class="tk-select">
+                        <option value="en">English</option>
+                        <option value="ta">தமிழ் / Tamil</option>
+                        <option value="hi">हिन्दी / Hindi</option>
+                        <option value="ml">മലയാളം / Malayalam</option>
+                        <option value="te">తెలుగు / Telugu</option>
+                    </select>
+
+                    <div class="btn-group">
+                        <button class="btn btn-cyan" onclick="startWorkflow('recording')">RECORDING</button>
+                        <button class="btn btn-dark" onclick="startWorkflow('camera')">CAPTURE CAMERA &<br>TELL UR ILLNESS</button>
+                    </div>
+                </div>
+
+                <div class="tk-footer">
+                    <span class="status-dot">●</span> System Ready
+                </div>
+            </div>
+
+            <!-- 2. VITALS SCREEN -->
+            <div id="screen-vitals" class="screen">
+                <div class="tk-header">
+                    <h2 id="vitals-title">SYSTEM INITIALIZATION</h2>
+                </div>
+                <div class="content" id="vitals-content">
+                    <!-- Content will be injected by JS -->
+                </div>
+                <div class="tk-footer" style="padding-top: 5px; height: 35px; justify-content: space-between; padding-left: 10px; padding-right: 10px;">
+                    <span id="vitals-status" style="font-size: 11px; color: #aaa; font-style: italic;">Preparing assessment...</span>
+                    <button id="vitals-btn" class="btn btn-cyan" style="width: auto; padding: 5px 10px; display: none;" onclick="vitalsNext()">CONTINUE</button>
+                </div>
+            </div>
+
+            <!-- 3. CAMERA SCREEN -->
+            <div id="screen-camera" class="screen">
+                <div class="tk-header">
+                    <h2 id="camera-title" style="color: #00D2FC;">X-RAY / LAB REPORT CAPTURE</h2>
+                </div>
+                <div class="content">
+                    <div class="camera-viewfinder">
+                        <div id="camera-overlay" class="overlay hidden">
+                            <p id="camera-overlay-text">Image Captured!</p>
+                        </div>
+                        <video id="live-camera" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; background: #111;"></video>
+                    </div>
+                    <div class="flex-row" style="margin-top:10px;">
+                        <button id="cam-capture-btn" class="btn btn-red" onclick="cameraCapture()">📷 CAPTURE DOC</button>
+                        <button id="cam-skip-btn" class="btn btn-dark" onclick="cameraSkip()">⏭ SKIP</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. VOICE SCREEN -->
+            <div id="screen-voice" class="screen">
+                <div class="tk-header">
+                    <h2 id="voice-title" style="color: #00D2FC;">VOICE INITIALIZING</h2>
+                </div>
+                <div class="content flex-center">
+                    <div class="mic-icon pulse" id="mic-icon" style="color:#FFEA00;">🎙️</div>
+                    <p id="voice-status" class="status-text" style="color:#FFEA00;">Initializing Voice System...</p>
+                    <p id="voice-sub" class="sub-text">Please wait for the prompt</p>
+                </div>
+            </div>
+
+            <!-- 5. RESULT SCREEN -->
+            <div id="screen-result" class="screen">
+                <div class="tk-header">
+                    <h2 style="color:#00E676;">ASSESSMENT COMPLETE</h2>
+                </div>
+                <div class="content scrollable">
+                    <p style="font-size:11px; color:#aaa; margin-bottom:5px;">Patient Vitals Summary:</p>
+                    <div class="result-row"><span>Temp:</span><strong id="res-temp" style="color:#ff9900;">-- °C</strong></div>
+                    <div class="result-row"><span>SpO2:</span><strong id="res-spo2" style="color:#00e676;">-- %</strong></div>
+                    <div class="result-row"><span>ECG:</span><strong id="res-ecg" style="color:#ff1744;">-- BPM</strong></div>
+                    <div class="result-row"><span>Doc:</span><strong id="res-doc" style="color:#fff;">Skipped</strong></div>
+                    
+                    <div class="result-box">
+                        <div class="box-title">AI ASSISTANT RECOMMENDATION</div>
+                        <div id="res-diagnosis" class="box-text">Generating report...</div>
+                    </div>
+                    
+                    <div class="flex-row" style="margin-top:15px;">
+                        <button class="btn btn-dark" style="background:#555;" onclick="window.print()">🖨️ PRINT</button>
+                        <button class="btn btn-dark" style="background:#00D2FC; color:#000;" onclick="playResultAudio()">🔊 PLAY</button>
+                    </div>
+                    <button class="btn btn-cyan" style="margin-top:8px;" onclick="resetApp()">NEW ASSESSMENT</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- PRINT ONLY LAYOUT -->
+    <div id="print-layout">
+        <h1 style="text-align:center;">HEALTHCARE AI ASSESSMENT REPORT</h1>
+        <hr style="margin-bottom:20px;">
+        <div style="font-size:16px; line-height:2;">
+            Patient Name: ___________________________<br>
+            Patient Age:  _______<br>
+            Date:         ___________________________<br><br>
+            
+            <strong>Temperature:</strong> <span id="print-temp">--</span><br>
+            <strong>SpO2:</strong> <span id="print-spo2">--</span><br>
+            <strong>ECG:</strong> <span id="print-ecg">--</span><br>
+            <strong>Document Analysis:</strong> <span id="print-doc">--</span><br><br>
+            
+            <strong>Diagnosis & Recommendation:</strong><br>
+            <p id="print-diag" style="margin-top:10px;"></p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

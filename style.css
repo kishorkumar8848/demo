@@ -1,0 +1,284 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #050505;
+    color: #fff;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.tft-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#print-layout {
+    display: none;
+    color: #000;
+    background: #fff;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+@media print {
+    body, html {
+        background-color: #fff;
+        height: auto;
+        overflow: visible;
+    }
+    .tft-wrapper {
+        display: none !important;
+    }
+    #print-layout {
+        display: block !important;
+    }
+}
+
+.tft-screen {
+    width: 240px;
+    height: 320px;
+    background-color: #121212;
+    position: relative;
+    overflow: hidden;
+    transform-origin: center center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Screens */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    background-color: #121212;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+/* Tkinter-style Header */
+.tk-header {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+.tk-header h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+/* Tkinter-style Card */
+.tk-card {
+    background-color: #1e1e1e;
+    margin: 10px;
+    flex: 1;
+    border-radius: 4px;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tk-welcome-text {
+    font-size: 11px;
+    color: #aaaaaa;
+    text-align: center;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.tk-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.tk-select {
+    background-color: #2a2a2a;
+    border: 1px solid #333333;
+    color: #00e5ff;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.btn {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.btn:active { opacity: 0.8; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-cyan { background-color: #00e5ff; color: #000000; }
+.btn-dark { background-color: #3a3a3a; color: #ffffff; }
+.btn-red { background-color: #FF1744; color: #ffffff; }
+.btn-green { background-color: #00E676; color: #000000; }
+
+/* Footer Status */
+.tk-footer {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    color: #aaaaaa;
+    font-weight: bold;
+    background-color: #121212;
+    padding-bottom: 10px;
+}
+.status-dot {
+    color: #00ff00;
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* Common internal screen styles */
+.content {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.flex-center { align-items: center; justify-content: center; }
+.flex-row { display: flex; flex-direction: row; gap: 8px; }
+
+/* Checklist Init */
+.check-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.check-icon {
+    font-size: 14px;
+    color: #aaaaaa;
+    margin-right: 10px;
+    width: 15px;
+}
+.check-icon.done {
+    color: #00E676;
+}
+.check-text {
+    font-size: 11px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Vitals styles */
+.vital-card {
+    background-color: #1e1e1e;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+.vital-title { width: 55px; font-size: 11px; color: #aaa; }
+.vital-bar {
+    flex: 1; height: 6px; background-color: #111; margin: 0 10px; position: relative; overflow: hidden;
+}
+.vital-bar .fill { height: 100%; width: 0%; transition: width 0.3s; }
+.fill.temp { background-color: #FF9100; }
+.fill.spo2 { background-color: #00E676; }
+.vital-val { width: 45px; text-align: right; font-size: 12px; font-weight: bold; }
+
+/* ECG Graph */
+.ecg-box {
+    background-color: #111;
+    border: 1px solid #333;
+    width: 100%;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+}
+.ecg-line {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border-bottom: 2px solid #FF1744;
+}
+
+/* Camera */
+.camera-viewfinder {
+    flex: 1;
+    background-color: #000;
+    position: relative;
+    border: 1px solid #333;
+}
+.mock-video {
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(45deg, #111, #111 10px, #222 10px, #222 20px);
+    animation: move-bg 3s linear infinite;
+}
+@keyframes move-bg { 100% { background-position: 28px 28px; } }
+.overlay {
+    position: absolute; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.8);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.3s;
+    text-align: center;
+}
+.overlay.hidden { opacity: 0; pointer-events: none; }
+#camera-overlay-text { color: #00E676; font-weight: bold; font-size: 12px;}
+
+/* Voice */
+.mic-icon { font-size: 40px; margin-bottom: 15px; }
+.pulse { animation: pulse-anim 1.5s infinite; }
+@keyframes pulse-anim {
+    0% { transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(0.9); }
+}
+.status-text { font-size: 16px; font-weight: bold; margin-bottom: 5px; color: #00e5ff;}
+.sub-text { font-size: 11px; color: #aaa; text-align: center; padding: 0 10px;}
+
+/* Result */
+.scrollable { overflow-y: auto; }
+.scrollable::-webkit-scrollbar { width: 4px; }
+.scrollable::-webkit-scrollbar-thumb { background: #333; }
+.result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #222; font-size: 12px; }
+.result-row span { color: #aaa; }
+.result-box { margin-top: 15px; background-color: #1e1e1e; padding: 10px; }
+.box-title { font-size: 11px; color: #aaa; margin-bottom: 5px; font-weight: bold;}
+.box-text { font-size: 11px; line-height: 1.4; color: #fff; }
