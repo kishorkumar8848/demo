@@ -40,11 +40,85 @@ function calReset() {
     localStorage.removeItem('calScaleY');
     localStorage.removeItem('calTransX');
     localStorage.removeItem('calTransY');
+    localStorage.removeItem('panelLeft');
+    localStorage.removeItem('panelTop');
+    const panel = document.getElementById('calibration-panel');
+    if (panel) {
+        panel.style.left = '50%';
+        panel.style.top = 'auto';
+        panel.style.bottom = '20px';
+        panel.style.transform = 'translateX(-50%)';
+    }
     resizeTFT();
 }
 
 window.addEventListener('resize', resizeTFT);
 window.addEventListener('load', resizeTFT);
+
+// -----------------------------
+// Calibration Panel Drag Logic
+// -----------------------------
+window.addEventListener('load', () => {
+    const panel = document.getElementById('calibration-panel');
+    const handle = document.getElementById('cal-drag-handle');
+    
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+    
+    // Check if there is saved position
+    const savedLeft = localStorage.getItem('panelLeft');
+    const savedTop = localStorage.getItem('panelTop');
+    if (savedLeft && savedTop) {
+        panel.style.left = savedLeft;
+        panel.style.top = savedTop;
+        panel.style.transform = 'none'; // Remove horizontal centering to allow free movement
+    }
+
+    function onDragStart(e) {
+        isDragging = true;
+        // Support touch and mouse
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        startX = clientX;
+        startY = clientY;
+        
+        const rect = panel.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        
+        panel.style.transform = 'none'; // Disconnect from centered transform
+        
+        e.preventDefault(); // prevent text selection
+    }
+
+    function onDragMove(e) {
+        if (!isDragging) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        
+        panel.style.left = (initialLeft + dx) + 'px';
+        panel.style.top = (initialTop + dy) + 'px';
+    }
+
+    function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        localStorage.setItem('panelLeft', panel.style.left);
+        localStorage.setItem('panelTop', panel.style.top);
+    }
+
+    handle.addEventListener('mousedown', onDragStart);
+    handle.addEventListener('touchstart', onDragStart, {passive: false});
+    
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('touchmove', onDragMove, {passive: false});
+    
+    document.addEventListener('mouseup', onDragEnd);
+    document.addEventListener('touchend', onDragEnd);
+});
 
 // -----------------------------
 // Custom Dropdown Logic
