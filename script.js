@@ -444,52 +444,44 @@ function startVoiceScreen() {
     let sub = document.getElementById('voice-sub');
     let mic = document.getElementById('mic-icon');
     
-    // Init state
-    title.innerText = "VOICE INITIALIZING";
-    title.style.color = "#00D2FC";
-    status.innerText = "Initializing Voice System...";
-    status.style.color = "#FFEA00";
-    sub.innerText = "Please wait for the prompt";
-    mic.style.color = "#FFEA00";
+    // Init state (0s - 7s)
+    title.innerText = "VOICE RECORDING";
+    title.style.color = "#00E676";
+    status.innerText = "Listening...";
+    status.style.color = "#00E676";
+    sub.innerText = "Please describe your symptoms";
+    mic.style.color = "#00E676";
     mic.className = "mic-icon pulse";
     
-    // Listening state
-    setTimeout(() => {
-        title.innerText = "VOICE RECORDING";
-        status.innerText = "Listening...";
-        status.style.color = "#00E676";
-        sub.innerText = "Please describe your symptoms";
-        mic.style.color = "#00E676";
-    }, 1500);
-    
-    // Processing state
+    // Processing state (7s)
     setTimeout(() => {
         title.innerText = "PROCESSING";
-        status.innerText = "Analyzing AI...";
+        status.innerText = "Initializing ASR...";
         status.style.color = "#FF9100";
         sub.innerText = "Please wait";
         mic.style.color = "#FF9100";
         mic.className = "mic-icon"; // Stop pulsing
-    }, 4500);
-    
-    // Speaking state
+    }, 7000);
+
+    // NMT Processing (7.5s)
     setTimeout(() => {
-        title.innerText = "ASSISTANT SPEAKING";
-        status.innerText = "Playing response...";
-        status.style.color = "#00D2FC";
-        sub.innerText = "Listen to the AI";
-        mic.style.color = "#00D2FC";
-        mic.className = "mic-icon pulse";
+        status.innerText = "NMT Processing...";
+    }, 7500);
+
+    // TTS Providing Answer (8s)
+    setTimeout(() => {
+        status.innerText = "TTS Providing Answer...";
+    }, 8000);
+    
+    // Output (9s)
+    setTimeout(() => {
         // Play pre-recorded WAV audio for Assistant Response
         let audioSrc = 'audio/' + selectedLang + '/response.wav';
         let audio = new Audio(audioSrc);
         audio.play().catch(e => console.error("Audio play failed: ", e));
-    }, 6500);
-    
-    // Done
-    setTimeout(() => {
+        
         showResultScreen();
-    }, 8500);
+    }, 9000);
 }
 
 // --- RESULT WORKFLOW ---
