@@ -1,15 +1,72 @@
 // -----------------------------
-// Viewport Scaling Logic
+// Viewport Scaling & Calibration Logic
 // -----------------------------
+let userScale = parseFloat(localStorage.getItem('calScale')) || 1.0;
+let userTransX = parseFloat(localStorage.getItem('calTransX')) || 0;
+let userTransY = parseFloat(localStorage.getItem('calTransY')) || 0;
+
 function resizeTFT() {
     const screen = document.querySelector('.tft-screen');
     const winW = window.innerWidth;
     const winH = window.innerHeight;
-    const scale = Math.min(winW / 240, winH / 320) * 0.95;
-    screen.style.transform = `scale(${scale})`;
+    const baseScale = Math.min(winW / 240, winH / 320) * 0.95;
+    const finalScale = baseScale * userScale;
+    screen.style.transform = `scale(${finalScale}) translate(${userTransX}px, ${userTransY}px)`;
 }
+
+function calShift(x, y) {
+    userTransX += x;
+    userTransY += y;
+    localStorage.setItem('calTransX', userTransX);
+    localStorage.setItem('calTransY', userTransY);
+    resizeTFT();
+}
+
+function calScale(ds) {
+    userScale += ds;
+    localStorage.setItem('calScale', userScale);
+    resizeTFT();
+}
+
+function calReset() {
+    userScale = 1.0;
+    userTransX = 0;
+    userTransY = 0;
+    localStorage.removeItem('calScale');
+    localStorage.removeItem('calTransX');
+    localStorage.removeItem('calTransY');
+    resizeTFT();
+}
+
 window.addEventListener('resize', resizeTFT);
 window.addEventListener('load', resizeTFT);
+
+// -----------------------------
+// Custom Dropdown Logic
+// -----------------------------
+window.addEventListener('load', () => {
+    let sel = document.getElementById("custom-lang-select");
+    let selected = document.getElementById("select-selected-val");
+    let items = document.getElementById("select-items-list");
+    
+    selected.addEventListener("click", function(e) {
+        e.stopPropagation();
+        items.classList.toggle("select-hide");
+    });
+    
+    let options = items.getElementsByTagName("div");
+    for (let i = 0; i < options.length; i++) {
+        options[i].addEventListener("click", function(e) {
+            selected.innerText = this.innerText;
+            selectedLang = this.getAttribute("data-val");
+            items.classList.add("select-hide");
+        });
+    }
+    
+    document.addEventListener("click", function() {
+        items.classList.add("select-hide");
+    });
+});
 
 // -----------------------------
 // Application State & Navigation
@@ -50,7 +107,6 @@ function showScreen(screenId) {
 }
 
 function startWorkflow(mode) {
-    selectedLang = document.getElementById('lang-selector').value;
     currentMode = mode;
     mockData = { temp: '--', spo2: '--', ecg: '--', docResult: 'Skipped', diagnosis: '' };
     

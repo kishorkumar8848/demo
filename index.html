@@ -20,13 +20,16 @@
                     <p class="tk-welcome-text">Welcome! Please configure and start your assessment below.</p>
                     
                     <p class="tk-label">Select Language:</p>
-                    <select id="lang-selector" class="tk-select">
-                        <option value="en">English</option>
-                        <option value="ta">தமிழ் / Tamil</option>
-                        <option value="hi">हिन्दी / Hindi</option>
-                        <option value="ml">മലയാളം / Malayalam</option>
-                        <option value="te">తెలుగు / Telugu</option>
-                    </select>
+                    <div class="custom-select" id="custom-lang-select" tabindex="0">
+                        <div class="select-selected" id="select-selected-val">English</div>
+                        <div class="select-items select-hide" id="select-items-list">
+                            <div data-val="en">English</div>
+                            <div data-val="ta">தமிழ் / Tamil</div>
+                            <div data-val="hi">हिन्दी / Hindi</div>
+                            <div data-val="ml">മലയാളം / Malayalam</div>
+                            <div data-val="te">తెలుగు / Telugu</div>
+                        </div>
+                    </div>
 
                     <div class="btn-group">
                         <button class="btn btn-cyan" onclick="startWorkflow('recording')">RECORDING</button>
@@ -109,6 +112,24 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+    
+    <!-- CALIBRATION CONTROLS (Visible on phone, outside the mask) -->
+    <div id="calibration-panel" class="calibration-panel">
+        <div style="font-size:10px; color:#aaa; margin-bottom:5px; font-weight:bold;">SCREEN CALIBRATION (Drag to Fit)</div>
+        <div class="cal-row">
+            <button class="cal-btn" onclick="calShift(0, -2)">▲</button>
+        </div>
+        <div class="cal-row">
+            <button class="cal-btn" onclick="calShift(-2, 0)">◀</button>
+            <button class="cal-btn" onclick="calShift(0, 2)">▼</button>
+            <button class="cal-btn" onclick="calShift(2, 0)">▶</button>
+        </div>
+        <div class="cal-row" style="margin-top:5px;">
+            <button class="cal-btn" onclick="calScale(0.01)">+</button>
+            <button class="cal-btn" onclick="calScale(-0.01)">-</button>
+            <button class="cal-btn" style="width:auto; padding:0 10px;" onclick="calReset()">RESET</button>
         </div>
     </div>
     
