@@ -341,16 +341,10 @@ function startVoiceScreen() {
         sub.innerText = "Listen to the AI";
         mic.style.color = "#00D2FC";
         mic.className = "mic-icon pulse";
-        
-        // Use Web Speech API for audio
-        if ('speechSynthesis' in window) {
-            let scenario = SCENARIOS[selectedLang];
-            if (scenario) {
-                let utterance = new SpeechSynthesisUtterance(scenario.text);
-                utterance.lang = scenario.langCode;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
+        // Play pre-recorded WAV audio for Assistant Response
+        let audioSrc = 'audio/' + selectedLang + '/response.wav';
+        let audio = new Audio(audioSrc);
+        audio.play().catch(e => console.error("Audio play failed: ", e));
     }, 6500);
     
     // Done
@@ -384,14 +378,9 @@ function showResultScreen() {
 }
 
 function playResultAudio() {
-    if ('speechSynthesis' in window) {
-        let scenario = SCENARIOS[selectedLang];
-        if (scenario) {
-            let utterance = new SpeechSynthesisUtterance(scenario.text);
-            utterance.lang = scenario.langCode;
-            window.speechSynthesis.speak(utterance);
-        }
-    }
+    let audioSrc = 'audio/' + selectedLang + '/response.wav';
+    let audio = new Audio(audioSrc);
+    audio.play().catch(e => console.error("Audio play failed: ", e));
 }
 
 function resetApp() {
