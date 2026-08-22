@@ -270,8 +270,12 @@ function vitalsNext() {
             vitalsStage++; showVitalsScreen();
         }
     } else if (vitalsStage === 4) {
-        cameraStage = 0;
-        showCameraScreen();
+        if (currentMode === 'recording') {
+            startVoiceScreen();
+        } else {
+            cameraStage = 0;
+            showCameraScreen();
+        }
     }
 }
 
