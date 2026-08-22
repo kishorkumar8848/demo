@@ -301,7 +301,7 @@ function vitalsNext() {
             document.getElementById('vitals-status').innerText = "Measuring Temperature...";
             document.getElementById('temp-fill').style.width = '100%';
             setTimeout(() => {
-                mockData.temp = (36.5 + Math.random()*2).toFixed(1);
+                mockData.temp = 38.2;
                 document.getElementById('temp-val').innerText = mockData.temp + ' °C';
                 document.getElementById('vitals-status').innerText = "Measurement complete.";
                 btn.innerText = "NEXT"; btn.style.display = 'block';
@@ -316,7 +316,7 @@ function vitalsNext() {
             document.getElementById('vitals-status').innerText = "Measuring SpO2...";
             document.getElementById('spo2-fill').style.width = '100%';
             setTimeout(() => {
-                mockData.spo2 = Math.floor(95 + Math.random()*5);
+                mockData.spo2 = 97;
                 document.getElementById('spo2-val').innerText = mockData.spo2 + ' %';
                 document.getElementById('vitals-status').innerText = "Measurement complete.";
                 btn.innerText = "NEXT"; btn.style.display = 'block';
@@ -340,7 +340,7 @@ function vitalsNext() {
             line.style.animation = 'move-bg 1s infinite linear';
             
             setTimeout(() => {
-                mockData.ecg = Math.floor(70 + Math.random()*20);
+                mockData.ecg = 82;
                 document.getElementById('ecg-val').innerText = mockData.ecg + ' BPM';
                 document.getElementById('vitals-status').innerText = "ECG complete.";
                 btn.innerText = "NEXT"; btn.style.display = 'block';
@@ -463,17 +463,17 @@ function startVoiceScreen() {
         mic.className = "mic-icon"; // Stop pulsing
     }, 7000);
 
-    // NMT Processing (7.5s)
+    // NMT Processing (10s)
     setTimeout(() => {
         status.innerText = "NMT Processing...";
-    }, 7500);
+    }, 10000);
 
-    // TTS Providing Answer (8s)
+    // TTS Providing Answer (13s)
     setTimeout(() => {
         status.innerText = "TTS Providing Answer...";
-    }, 8000);
+    }, 13000);
     
-    // Output (9s)
+    // Output (16s)
     setTimeout(() => {
         // Play pre-recorded WAV audio for Assistant Response
         let audioSrc = 'audio/' + selectedLang + '/response.wav';
@@ -481,7 +481,7 @@ function startVoiceScreen() {
         audio.play().catch(e => console.error("Audio play failed: ", e));
         
         showResultScreen();
-    }, 9000);
+    }, 16000);
 }
 
 // --- RESULT WORKFLOW ---
