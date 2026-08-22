@@ -7,9 +7,8 @@ let userTransY = parseFloat(localStorage.getItem('calTransY')) || 0;
 
 function resizeTFT() {
     const screen = document.querySelector('.tft-screen');
-    const winW = window.innerWidth;
-    const winH = window.innerHeight;
-    const baseScale = Math.min(winW / 240, winH / 320) * 0.95;
+    // Default base scale set to 1.0 to make it physically small (approx 2.8 inches)
+    const baseScale = 1.0;
     const finalScale = baseScale * userScale;
     screen.style.transform = `scale(${finalScale}) translate(${userTransX}px, ${userTransY}px)`;
 }
