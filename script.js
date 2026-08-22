@@ -378,9 +378,9 @@ function showCameraScreen() {
         capBtn.innerText = "📷 CAPTURE ISSUE";
     }
     
-    // Start Webcam
+    // Start Webcam (Back Camera)
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
             videoStream = stream;
             let videoElement = document.getElementById('live-camera');
             if (videoElement) {
