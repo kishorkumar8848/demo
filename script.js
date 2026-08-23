@@ -153,22 +153,27 @@ window.addEventListener('load', () => {
 const SCENARIOS = {
     "en": {
         "text": "Your temperature is 38.2 °C and oxygen saturation is 97%. Since you are experiencing breathing difficulty, please sit upright and stay calm. We suggest consulting a doctor immediately.",
+        "cameraText": "Based on the captured image, it appears to be a mild skin rash. Please keep the area clean and apply a soothing ointment. Consult a dermatologist if it persists.",
         "langCode": "en-US"
     },
     "ta": {
         "text": "உங்களுக்கு நெஞ்சு வலி மற்றும் படபடப்பு இருப்பதாகக் கூறினீர்கள். உங்களது நாடி துடிப்பு நிமிடத்திற்கு 82 துடிப்புகளாக உள்ளது மற்றும் இதய துடிப்பு வரைபடம் சீராக உள்ளது. நெஞ்சு வலி என்பதால், தாமதிக்காமல் உடனடியாக மருத்துவரை அணுகுமாறு அறிவுறுத்துகிறோம்.",
+        "cameraText": "படம் மூலம், இது ஒரு சாதாரண தோல் தடிப்பு (rash) போல் தெரிகிறது. அப்பகுதியை சுத்தமாக வைத்து, தகுந்த களிம்பு தடவவும். இது தொடர்ந்தால் தோல் மருத்துவரை அணுகவும்.",
         "langCode": "ta-IN"
     },
     "hi": {
         "text": "आपको सिरदर्द and चक्कर आने की शिकायत है। आपका तापमान 38.2 °C और नाड़ी दर 82 BPM है। कृपया आराम करें, अधिक मात्रा में तरल पदार्थ लें और जल्द से जल्द किसी डॉक्टर से परामर्श करें।",
+        "cameraText": "छवि के आधार पर, यह त्वचा पर चकत्ते (rash) जैसा लगता है। कृपया क्षेत्र को साफ रखें और मरहम लगाएं। यदि यह बना रहता है तो त्वचा विशेषज्ञ से परामर्श लें।",
         "langCode": "hi-IN"
     },
     "ml": {
         "text": "നിങ്ങൾക്ക് പനിയും ജലദോഷവും ഉള്ളതായി കാണുന്നു. നിങ്ങളുടെ ശരീര താപനില 38.2 °C ആയി ഉയർന്നിരിക്കുന്നു, എങ്കിലും ഓക്സിജൻ്റെ അളവ് 97% ലും നാഡിമിടിപ്പ് 82 BPM ലും സുരക്ഷിതമാണ്. ധാരാളം വെള്ളം കുടിക്കുകയും നന്നായി വിശ്രമിക്കുകയും ചെയ്യുക. ലക്ഷണങ്ങൾ തുടരുകയാണെങ്കിൽ ദയവായി ഒരു ഡോക്ടറെ കാണുക.",
+        "cameraText": "ചിത്രം അടിസ്ഥാനമാക്കി, ഇതൊരു സാധാരണ ചർമ്മ തിണർപ്പ് (rash) ആണെന്ന് തോന്നുന്നു. ദയവായി വൃത്തിയായി സൂക്ഷിക്കുകയും തൈലം പുരട്ടുകയും ചെയ്യുക. ഇത് തുടരുകയാണെങ്കിൽ ഡോക്ടറെ കാണുക.",
         "langCode": "ml-IN"
     },
     "te": {
         "text": "మీకు కడుపు నొప్పి మరియు వికారం ఉన్నట్లు తెలుస్తోంది. మీ నాడి వేగం 82 BPM మరియు ఉష్ణోగ్రత 38.2 °C స్థిరంగా ఉన్నాయి. దయచేసి వెంటనే ఒక వైద్యుడిని సంప్రదించండి.",
+        "cameraText": "చిత్రం ఆధారంగా, ఇది సాధారణ చర్మపు దద్దుర్లు (rash) లాగా కనిపిస్తుంది. దయచేసి శుభ్రంగా ఉంచి లేపనం రాయండి. ఇది తగ్గకపోతే వైద్యుడిని సంప్రదించండి.",
         "langCode": "te-IN"
     }
 };
@@ -496,7 +501,11 @@ function showResultScreen() {
     let diag = "Based on the assessment, the patient's vitals are generally stable.";
     let scenario = SCENARIOS[selectedLang];
     if (scenario) {
-        diag = scenario.text;
+        if (currentMode === 'camera' && scenario.cameraText) {
+            diag = scenario.cameraText;
+        } else {
+            diag = scenario.text;
+        }
     }
     document.getElementById('res-diagnosis').innerText = diag;
     
