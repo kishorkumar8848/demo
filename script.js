@@ -372,14 +372,16 @@ function showCameraScreen() {
     
     if (cameraStage === 0) {
         title.innerText = "X-RAY / LAB REPORT CAPTURE";
+        title.style.color = "#00D2FC";
         capBtn.innerText = "📷 CAPTURE DOC";
     } else {
         title.innerText = "SKIN ISSUE CAPTURE";
+        title.style.color = "#FF9100";
         capBtn.innerText = "📷 CAPTURE ISSUE";
     }
     
     // Start Webcam (Back Camera)
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    if (!videoStream && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
             videoStream = stream;
             let videoElement = document.getElementById('live-camera');
